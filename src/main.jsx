@@ -9,6 +9,7 @@ import Search from "./Search/Search.jsx";
 import Sort from "./Sort/Sort.jsx";
 import BubbleSort from "./Sort/BubleSort/BubbleSort.jsx";
 import SelectionSort from "./Sort/SelectionSort/SelectionSort.jsx";
+import CountingSort from "./Sort/CountingSort/CountingSort.jsx";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: "/sort/selectionsort",
         element: <SelectionSort />,
+      },
+      {
+        path: "/sort/countingsort",
+        element: <CountingSort />,
       },
     ],
   },
