@@ -7,6 +7,7 @@ import Main from "./Main/Main";
 import ErrorPage from "./ErrorPage/ErrorPage.jsx";
 import Search from "./Search/Search.jsx";
 import Sort from "./Sort/Sort.jsx";
+import BubbleSort from "./Sort/BubleSort/BubbleSort.jsx";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: "/search",
         element: <Search />,
+      },
+      {
+        path: "/sort/bubblesort",
+        element: <BubbleSort />,
       },
     ],
   },
