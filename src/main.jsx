@@ -11,6 +11,7 @@ import BubbleSort from "./Sort/BubleSort/BubbleSort.jsx";
 import SelectionSort from "./Sort/SelectionSort/SelectionSort.jsx";
 import CountingSort from "./Sort/CountingSort/CountingSort.jsx";
 import BinarySearch from "./Search/BinarySearch/BinarySearch.jsx";
+import LinearSearch from "./Search/LinearSearch/LinearSearch.jsx";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
       {
         path: "/sort/binarysearch",
         element: <BinarySearch />,
+      },
+      {
+        path: "/sort/linearsearch",
+        element: <LinearSearch />,
       },
     ],
   },
