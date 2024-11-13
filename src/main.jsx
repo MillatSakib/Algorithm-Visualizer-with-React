@@ -2,11 +2,20 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Layout from "./Layout";
+import Main from "./Main/Main";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <div>Algorithm Visualizer</div>,
+    element: <Layout></Layout>,
+    errorElement: <Layout />,
+    children: [
+      {
+        path: "/",
+        element: <Main></Main>,
+      },
+    ],
   },
 ]);
 
