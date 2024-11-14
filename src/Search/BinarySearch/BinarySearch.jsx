@@ -12,6 +12,7 @@ const BinarySearch = () => {
   const [isGenerateEnabled, setIsGenerateEnabled] = useState(false);
   const [isSearchingNow, setIsSearchingNow] = useState(false);
   const [notFoundText, setNotFoundText] = useState(false);
+  const [midHistory, setMidHistory] = useState([]); // New state to store middle indices
 
   const speedMap = {
     Slow: 1000,
@@ -50,6 +51,7 @@ const BinarySearch = () => {
     setLeft(0);
     setRight(newArray.length - 1);
     setMiddle(null);
+    setMidHistory([]); // Reset midHistory when array changes
   };
 
   const handleGenerateArray = () => {
@@ -62,6 +64,7 @@ const BinarySearch = () => {
     setLeft(0);
     setRight(newArray.length - 1);
     setMiddle(null);
+    setMidHistory([]); // Reset midHistory when array changes
   };
 
   const handleSearch = () => {
@@ -77,6 +80,7 @@ const BinarySearch = () => {
       setLeft((prevLeft) => {
         const mid = Math.floor((prevLeft + right) / 2);
         setMiddle(mid);
+        setMidHistory((prevHistory) => [...prevHistory, mid]); // Add mid to history
 
         if (array[mid] === parseInt(target)) {
           setFoundIndex(mid);
@@ -109,6 +113,7 @@ const BinarySearch = () => {
     setRight(array.length - 1);
     setMiddle(null);
     setFoundIndex(null);
+    setMidHistory([]); // Reset midHistory when search resets
     setIsGenerateEnabled(!!elementsCount);
     setNotFoundText(false);
   };
@@ -198,8 +203,8 @@ const BinarySearch = () => {
                 backgroundColor:
                   index === foundIndex
                     ? "green"
-                    : index === middle
-                    ? "orange"
+                    : midHistory.includes(index) // Check if index is in midHistory
+                    ? "gray" // "ash" color for all mid indices encountered
                     : index >= left && index <= right
                     ? "green"
                     : "red",
