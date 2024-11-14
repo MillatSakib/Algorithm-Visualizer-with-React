@@ -11,14 +11,12 @@ const LinearSearch = () => {
   const [isSearchingNow, setIsSearchingNow] = useState(false);
   const [notFoundText, setNotFoundText] = useState(false);
 
-  // Speed mappings in milliseconds
   const speedMap = {
     Slow: 1000,
     Medium: 500,
     Fast: 200,
   };
 
-  // Clear interval on unmount
   useEffect(() => {
     return () => {
       if (isSearchingNow) clearInterval(handleSearch.intervalId);
