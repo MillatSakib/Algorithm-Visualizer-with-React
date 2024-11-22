@@ -10,9 +10,9 @@ const BubbleSort = () => {
   const [isSortingNow, setIsSortingNow] = useState(false);
 
   const speedMap = {
-    Slow: 1000,
-    Medium: 500,
-    Fast: 200,
+    Slow: 1500,
+    Medium: 800,
+    Fast: 400,
   };
 
   const handleSpeedChange = (e) => {
@@ -62,22 +62,22 @@ const BubbleSort = () => {
           setTimeout(() => {
             [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
             setArray([...arr]);
-            setSwappingIndices([]); // Clear swap highlighting
+            setTimeout(() => setSwappingIndices([]), speedMap[speed] / 2);
             j++;
-            bubbleSortStep(); // Move to the next comparison
-          }, speedMap[speed] / 2); // Swap delay
+            bubbleSortStep();
+          }, speedMap[speed]);
         } else {
           j++;
-          bubbleSortStep(); // No swap needed, continue
+          bubbleSortStep();
         }
       } else {
         i++;
         j = 0;
-        bubbleSortStep(); // Move to the next pass
+        bubbleSortStep();
       }
     };
 
-    bubbleSortStep(); // Start the sorting
+    bubbleSortStep();
   };
 
   const resetSort = () => {
@@ -159,15 +159,17 @@ const BubbleSort = () => {
                 height: `${value * 10}px`,
                 width: "30px",
                 backgroundColor: swappingIndices.includes(index)
-                  ? "green" // Swapping elements
+                  ? "purple"
                   : currentComparing.includes(index)
-                  ? "blue" // Comparing elements
-                  : "red", // Not swapping
+                  ? "blue"
+                  : "red",
                 textAlign: "center",
                 color: "white",
-                transition: swappingIndices.includes(index)
-                  ? `height ${speedMap[speed] / 2}ms ease-in-out`
-                  : undefined, // Animation for swapping
+                transition: `height ${
+                  speedMap[speed] / 2
+                }ms ease-in-out, background-color ${
+                  speedMap[speed] / 2
+                }ms ease-in-out`,
               }}
             >
               {value}
