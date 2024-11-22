@@ -198,6 +198,28 @@ const LinearSearch = () => {
           Target not found
         </p>
       )}
+      <div
+        className={
+          array.length
+            ? "flex gap-2 items-center justify-center my-4 flex-col"
+            : "hidden"
+        }
+      >
+        <div className="flex items-center gap-2">
+          <span className="font-bold">Primary Color: </span>{" "}
+          <div className="h-4 w-4 bg-gray-500"></div>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="font-bold">Item Found: </span>{" "}
+          <div className="h-4 w-4 bg-green-700"></div>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="font-bold">
+            Comparing between Item and array element:{" "}
+          </span>{" "}
+          <div className="h-4 w-4 bg-yellow-500"></div>
+        </div>
+      </div>
     </div>
   );
 };
