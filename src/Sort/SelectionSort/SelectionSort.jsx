@@ -4,6 +4,7 @@ const SelectionSort = () => {
   const [array, setArray] = useState([]);
   const [currentComparing, setCurrentComparing] = useState([]);
   const [swappingIndices, setSwappingIndices] = useState([]);
+  const [previousSortedPosition, setPreviousSortedPosition] = useState(-1); // Lagging yellow highlight
   const [speed, setSpeed] = useState("");
   const [elementsCount, setElementsCount] = useState("");
   const [isGenerateEnabled, setIsGenerateEnabled] = useState(false);
@@ -49,6 +50,10 @@ const SelectionSort = () => {
 
     const selectionSortStep = () => {
       if (i >= arr.length - 1) {
+        // Sorting complete
+        setSwappingIndices([]);
+        setCurrentComparing([]);
+        setPreviousSortedPosition(i); // Finalize the yellow on last position
         setIsSortingNow(false);
         setIsGenerateEnabled(true);
         return;
@@ -65,15 +70,17 @@ const SelectionSort = () => {
           setTimeout(findMin, speedMap[speed] / 2);
         } else {
           if (minIndex !== i) {
-            setSwappingIndices([i, minIndex]);
+            setSwappingIndices([i, minIndex]); // Highlight swapping elements
             setTimeout(() => {
-              [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
+              [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]]; // Swap
               setArray([...arr]);
-              setSwappingIndices([]);
+              setSwappingIndices([]); // Reset swapping highlight
+              setPreviousSortedPosition(i); // Update lagging yellow highlight
               i++;
               selectionSortStep();
             }, speedMap[speed] / 2);
           } else {
+            setPreviousSortedPosition(i); // Update lagging yellow highlight
             i++;
             selectionSortStep();
           }
@@ -89,6 +96,7 @@ const SelectionSort = () => {
   const resetSort = () => {
     setCurrentComparing([]);
     setSwappingIndices([]);
+    setPreviousSortedPosition(-1);
     setIsGenerateEnabled(!!elementsCount);
   };
 
@@ -164,21 +172,48 @@ const SelectionSort = () => {
               style={{
                 height: `${value * 10}px`,
                 width: "30px",
-                backgroundColor: swappingIndices.includes(index)
-                  ? "green" // Swapping elements
-                  : currentComparing.includes(index)
-                  ? "blue" // Comparing elements
-                  : "red", // Not swapping
+                backgroundColor:
+                  index === previousSortedPosition
+                    ? "orange"
+                    : swappingIndices.includes(index)
+                    ? "blue"
+                    : currentComparing.includes(index)
+                    ? "red"
+                    : "gray",
                 textAlign: "center",
                 color: "white",
                 transition: swappingIndices.includes(index)
                   ? `height ${speedMap[speed] / 2}ms ease-in-out`
-                  : undefined, // Animation for swapping
+                  : undefined,
               }}
             >
               {value}
             </div>
           ))}
+        </div>
+      </div>
+      <div
+        className={
+          array.length
+            ? "flex gap-2 items-center justify-center my-4 flex-col"
+            : "hidden"
+        }
+      >
+        <div className="flex items-center gap-2">
+          <span className="font-bold">Default: </span>
+          <div className="h-4 w-4 bg-gray-400"></div>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="font-bold">Last Swapped Element: </span>
+          <div className="h-4 w-4 bg-yellow-500"></div>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="font-bold">Swapping Elements: </span>
+          <div className="h-4 w-4 bg-blue-500"></div>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="font-bold">Comparing Elements: </span>
+          <div className="h-4 w-4 bg-red-500"></div>
         </div>
       </div>
     </div>
