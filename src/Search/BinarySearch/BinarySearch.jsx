@@ -201,6 +201,7 @@ const BinarySearch = () => {
           ))}
         </div>
       </div>
+
       {foundIndex !== null && (
         <p className="text-blue-600 font-bold text-xl text-center mt-6">
           Found item at index {foundIndex}
@@ -211,6 +212,31 @@ const BinarySearch = () => {
           Target not found
         </p>
       )}
+
+      <div
+        className={
+          array.length
+            ? "flex gap-2 items-center justify-center my-4 flex-col"
+            : "hidden"
+        }
+      >
+        <div className="flex items-center gap-2">
+          <span className="font-bold">Ignored Items: </span>{" "}
+          <div className="h-4 w-4 bg-red-500"></div>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="font-bold">Not Checked: </span>{" "}
+          <div className="h-4 w-4 bg-blue-500"></div>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="font-bold">Traversed Mid: </span>{" "}
+          <div className="h-4 w-4 bg-gray-500"></div>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="font-bold">Item Found: </span>{" "}
+          <div className="h-4 w-4 bg-green-700"></div>
+        </div>
+      </div>
     </div>
   );
 };
