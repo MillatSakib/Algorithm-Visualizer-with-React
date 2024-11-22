@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const BinarySearch = () => {
   const [array, setArray] = useState([]);
@@ -12,20 +12,13 @@ const BinarySearch = () => {
   const [isGenerateEnabled, setIsGenerateEnabled] = useState(false);
   const [isSearchingNow, setIsSearchingNow] = useState(false);
   const [notFoundText, setNotFoundText] = useState(false);
-  const [midHistory, setMidHistory] = useState([]); // New state to store middle indices
+  const [midHistory, setMidHistory] = useState([]);
 
   const speedMap = {
     Slow: 1000,
     Medium: 500,
     Fast: 200,
   };
-
-  // Reset interval on unmount
-  useEffect(() => {
-    return () => {
-      if (isSearchingNow) clearInterval(handleSearch.intervalId);
-    };
-  }, [isSearchingNow]);
 
   const handleInputChange = (e) => {
     setTarget(e.target.value);
@@ -38,20 +31,15 @@ const BinarySearch = () => {
   };
 
   const handleElementsCountChange = (e) => {
-    const elementCount = e.target.value;
-    setElementsCount(elementCount);
+    const count = parseInt(e.target.value);
+    setElementsCount(count);
     setIsGenerateEnabled(true);
-
     const newArray = Array.from(
-      { length: parseInt(elementCount) },
+      { length: count },
       () => Math.floor(Math.random() * 30) + 4
-    ).sort((a, b) => a - b); // Sort the array for binary search
+    ).sort((a, b) => a - b);
     setArray(newArray);
-    setFoundIndex(null);
-    setLeft(0);
-    setRight(newArray.length - 1);
-    setMiddle(null);
-    setMidHistory([]); // Reset midHistory when array changes
+    resetSearch(); // Reset all related states
   };
 
   const handleGenerateArray = () => {
@@ -60,51 +48,46 @@ const BinarySearch = () => {
       () => Math.floor(Math.random() * 30) + 4
     ).sort((a, b) => a - b);
     setArray(newArray);
-    setFoundIndex(null);
-    setLeft(0);
-    setRight(newArray.length - 1);
-    setMiddle(null);
-    setMidHistory([]); // Reset midHistory when array changes
+    resetSearch();
   };
 
   const handleSearch = () => {
+    let l = 0;
+    let r = array.length - 1;
     setIsSearchingNow(true);
-    setIsGenerateEnabled(false);
-    setFoundIndex(null);
-    setLeft(0);
-    setRight(array.length - 1);
-    setMiddle(null);
     setNotFoundText(false);
+    setFoundIndex(null);
+    setMidHistory([]);
 
-    handleSearch.intervalId = setInterval(() => {
-      setLeft((prevLeft) => {
-        const mid = Math.floor((prevLeft + right) / 2);
-        setMiddle(mid);
-        setMidHistory((prevHistory) => [...prevHistory, mid]); // Add mid to history
+    const intervalId = setInterval(() => {
+      if (l > r) {
+        clearInterval(intervalId);
+        setIsSearchingNow(false);
+        setNotFoundText(true);
+        setIsGenerateEnabled(true);
+        return;
+      }
 
-        if (array[mid] === parseInt(target)) {
-          setFoundIndex(mid);
-          setIsSearchingNow(false);
-          clearInterval(handleSearch.intervalId);
-          setIsGenerateEnabled(true);
-          return prevLeft;
-        }
+      const mid = Math.floor((l + r) / 2);
+      setMiddle(mid);
+      setMidHistory((prevHistory) => [...prevHistory, mid]);
 
-        if (prevLeft > right) {
-          setIsSearchingNow(false);
-          clearInterval(handleSearch.intervalId);
-          setIsGenerateEnabled(true);
-          setNotFoundText(true);
-          return prevLeft;
-        }
+      if (array[mid] === parseInt(target)) {
+        clearInterval(intervalId);
+        setFoundIndex(mid);
+        setIsSearchingNow(false);
+        setIsGenerateEnabled(true);
+        return;
+      }
 
-        if (array[mid] < parseInt(target)) {
-          setLeft(mid + 1);
-        } else {
-          setRight(mid - 1);
-        }
-        return prevLeft;
-      });
+      if (array[mid] < parseInt(target)) {
+        l = mid + 1;
+      } else {
+        r = mid - 1;
+      }
+
+      setLeft(l);
+      setRight(r);
     }, speedMap[speed]);
   };
 
@@ -113,9 +96,10 @@ const BinarySearch = () => {
     setRight(array.length - 1);
     setMiddle(null);
     setFoundIndex(null);
-    setMidHistory([]); // Reset midHistory when search resets
+    setMidHistory([]);
     setIsGenerateEnabled(!!elementsCount);
     setNotFoundText(false);
+    setIsSearchingNow(false);
   };
 
   return (
@@ -203,10 +187,10 @@ const BinarySearch = () => {
                 backgroundColor:
                   index === foundIndex
                     ? "green"
-                    : midHistory.includes(index) // Check if index is in midHistory
-                    ? "gray" // "ash" color for all mid indices encountered
+                    : midHistory.includes(index)
+                    ? "gray"
                     : index >= left && index <= right
-                    ? "green"
+                    ? "blue"
                     : "red",
                 textAlign: "center",
                 color: "white",
